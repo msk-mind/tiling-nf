@@ -3,7 +3,7 @@ params.dremio.scheme = 'grpc+tcp'
 
 process GET_SLIDES {
     executor 'local'
-    conda 'conda-forge::pyarrow'
+    conda 'environment.yml'
 
     secret 'DREMIO_PASSWORD'
     secret 'DREMIO_USERNAME'
@@ -12,7 +12,15 @@ process GET_SLIDES {
     path "samples.csv"
 
     script:
-    template 'get_slides.py'
+    """
+    get_slides.py \
+        -o samples.csv \
+        --scheme ${params.dremio.scheme} \
+        --hostname ${params.dremio.hostname} \
+        --port ${params.dremio.port} \
+        ${params.dremio.space} \
+        ${params.dremio.table}
+    """
 
 }
 
