@@ -3,7 +3,7 @@ params.dremio.scheme = 'grpc+tcp'
 
 process GET_SLIDES {
     executor 'local'
-    conda 'environment.yml'
+    conda "$moduleDir/environment.yml"
 
     secret 'DREMIO_PASSWORD'
     secret 'DREMIO_USERNAME'
