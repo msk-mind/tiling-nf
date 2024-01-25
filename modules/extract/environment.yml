@@ -1,0 +1,9 @@
+name: tiling
+channels:
+  - conda-forge
+  - nodefaults
+dependencies:
+  - python=3.9.*
+  - configargparse
+  - pyarrow
+  - pandas

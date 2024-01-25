@@ -1,7 +1,9 @@
 #!/usr/bin/env python
-import os
 
+import configargparse
+import os
 from pyarrow import flight
+from pathlib import Path
 
 class DremioClientAuthMiddlewareFactory(flight.ClientMiddlewareFactory):
     """A factory that creates DremioClientAuthMiddleware(s)."""
@@ -131,19 +133,26 @@ class DremioDataframeConnector:
         return reader.read_pandas()
 
 if __name__ == "__main__":
+    p = configargparse.ArgParser(
+        description='Get a table from dremio',
+    )
+    p.add('-c', '--my-config', is_config_file=True, help='config file path')
+    p.add('-o', '--output-path', type=Path, help='output path')
+    p.add('-p', '--port', nargs='?', default=32010, type=int, help='server port')
+    p.add('-n', '--hostname', nargs='?', required=True, type=str, help='server hostname')
+    p.add('-s', '--scheme', nargs='?', default='grpc+tcp', type=str, help='connection scheme')
+    p.add('-u', '--username', nargs='?', type=str, env_var='DREMIO_USERNAME', help='dremio username')
+    p.add('-pw', '--password', nargs='?', type=str, env_var='DREMIO_PASSWORD', help='dremio password')
+    p.add('space', type=str, help='Dremio space')
+    p.add('table', type=str, help='Dremio table')
 
-    username = os.environ['DREMIO_USERNAME']
-    password = os.environ['DREMIO_PASSWORD']
+    args = p.parse_args()
 
     dremioDfConnector = DremioDataframeConnector(
-        "${params.dremio.scheme}",
-        "${params.dremio.hostname}",
-        ${params.dremio.port},
-        username,
-        password
-        )
-    df = dremioDfConnector.get_table("${params.dremio.space}", "${params.dremio.table}")
-    with open("samples.csv", 'w') as f:
-        f.write('slide_id,path\\n')
-        for image_id in df.image_id:
-            f.write(f'{image_id},s3://hobbit/{image_id}.svs\\n')
+        args.scheme,
+        args.hostname,
+        args.port,
+        args.username,
+        args.password)
+    df = dremioDfConnector.get_table(args.space, args.table)
+    df.to_csv(args.o)
