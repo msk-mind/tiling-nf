@@ -155,4 +155,4 @@ if __name__ == "__main__":
         args.username,
         args.password)
     df = dremioDfConnector.get_table(args.space, args.table)
-    df.to_csv(args.output_path)
+    df.to_json(args.output_path)
