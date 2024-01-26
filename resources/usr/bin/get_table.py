@@ -134,7 +134,7 @@ class DremioDataframeConnector:
 
 if __name__ == "__main__":
     p = configargparse.ArgParser(
-        description='Get a table from dremio',
+        description='Get a table from dremio and output as json',
     )
     p.add('-c', '--my-config', is_config_file=True, help='config file path')
     p.add('-o', '--output-path', type=Path, help='output path')
@@ -143,6 +143,9 @@ if __name__ == "__main__":
     p.add('-s', '--scheme', nargs='?', default='grpc+tcp', type=str, help='connection scheme')
     p.add('-u', '--username', nargs='?', type=str, env_var='DREMIO_USERNAME', help='dremio username')
     p.add('-pw', '--password', nargs='?', type=str, env_var='DREMIO_PASSWORD', help='dremio password')
+    p.add('--orient', nargs='?', type=str, default='records',
+          choices=['split', 'records', 'index', 'columns', 'values', 'table'],
+          help='JSON string format')
     p.add('space', type=str, help='Dremio space')
     p.add('table', type=str, help='Dremio table')
 
@@ -155,4 +158,4 @@ if __name__ == "__main__":
         args.username,
         args.password)
     df = dremioDfConnector.get_table(args.space, args.table)
-    df.to_json(args.output_path)
+    df.to_json(args.output_path, orient=args.orient)

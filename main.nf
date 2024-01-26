@@ -9,12 +9,12 @@ process GET_SLIDES {
     secret 'DREMIO_USERNAME'
 
     output:
-    path "samples.csv"
+    path "samples.json"
 
     script:
     """
-    get_slides.py \
-        -o samples.csv \
+    get_tables.py \
+        -o samples.json \
         --scheme ${params.dremio.scheme} \
         --hostname ${params.dremio.hostname} \
         --port ${params.dremio.port} \
