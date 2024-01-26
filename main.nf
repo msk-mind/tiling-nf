@@ -1,7 +1,7 @@
 params.dremio.port = 32010
 params.dremio.scheme = 'grpc+tcp'
 
-process GET_SLIDES {
+process GET_TABLE {
     executor 'local'
     conda "$moduleDir/environment.yml"
 
@@ -9,12 +9,12 @@ process GET_SLIDES {
     secret 'DREMIO_USERNAME'
 
     output:
-    path "samples.json"
+    path "table.json"
 
     script:
     """
-    get_tables.py \
-        -o samples.json \
+    get_table.py \
+        -o table.json \
         --scheme ${params.dremio.scheme} \
         --hostname ${params.dremio.hostname} \
         --port ${params.dremio.port} \
