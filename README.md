@@ -22,7 +22,7 @@ A pipeline for pathology slide analysis: tile and detect tissue
     ```
     `samples.csv` is a csv file which has a `url` (specify with `--slide_url_column`) column that has the path to the slide
 
-4. When the execution completes, results will be in the `results` (specify with `--outdir`) directory
+4. When the execution completes, `meta.csv` will be in the `results` (specify with `--outdir`) directory
 
 
 ## Azure Batch Support
@@ -39,4 +39,4 @@ A pipeline for pathology slide analysis: tile and detect tissue
     ```
     where `{azure_bucket_dir}` is an azure path like `az://test/nftest`.
 
-5. When the execution completes, results will be in the `results` directory
+5. When the execution completes, `meta.csv` will be in the `results` directory

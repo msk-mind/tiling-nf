@@ -1,3 +1,9 @@
+@Grab('org.apache.commons:commons-csv:1.10.0')
+import org.apache.commons.csv.CSVPrinter
+import org.apache.commons.csv.CSVFormat
+
+import groovy.json.JsonSlurper
+
 params.outdir = "results"
 params.check_slides_exist = false
 params.samples_csv = null
@@ -24,5 +30,5 @@ workflow {
         ch_slides = ch_slides.take(5)
     }
 
-    TILING(ch_slides).view()
+    TILING(ch_slides)
 }
